@@ -6,8 +6,7 @@ project("cmake Arduino test")
 # Product filename
 set(PRODUCT_NAME my_firmware)
 ## AVR Chip Configuration
-# 8Mhz, this should match the crystal on your board,
-# I use 8Mhz and 3.3V for the lowest power consumption
+# 16Mhz, can change to 8Mhz for lower power consumption
 set(F_CPU 16000000UL)
 # CPU, you can find the list here:
 # https://gcc.gnu.org/onlinedocs/gcc/AVR-Options.html
@@ -16,7 +15,9 @@ set(MCU atmega328p)
 set(BAUD 9600)
 # The programmer to use, read avrdude manual for list
 set(PROG_TYPE arduino)
-# The USB-port to use, dmesg | grep "tty"
+# The USB-port to use
+#Linux(and mac?) can find with: dmesg | grep "tty"
+#Windows good luck
 set(USB_PORT /dev/ttyUSB0)
 
 # AVR Fuses, must be in concordance with your hardware and F_CPU
@@ -40,6 +41,7 @@ add_definitions(
 # mmcu MUST be passed to bot the compiler and linker, this handle the linker
 set(CMAKE_EXE_LINKER_FLAGS -mmcu=${MCU})
 
+#Honestly the commented out flags I have no clue what they do
 add_compile_options(
     -mmcu=${MCU} # MCU
     -std=gnu99 # C99 standard
@@ -51,17 +53,18 @@ add_compile_options(
     -Wstrict-prototypes
     -Werror
     -Wfatal-errors
-    -Wl,--relax,--gc-sections
-    -g
-    -gdwarf-2
-    -funsigned-char # a few optimizations
-    -funsigned-bitfields
-    -fpack-struct
-    -fshort-enums
-    -ffunction-sections
-    -fdata-sections
-    -fno-split-wide-types
-    -fno-tree-scev-cprop
+    # -Wl,--relax,--gc-sections
+    # -g
+    # -gdwarf-2
+    # -funsigned-char # a few optimizations
+    # -funsigned-bitfields
+    # -fpack-struct
+    # -fshort-enums
+    # -ffunction-sections
+    # -fdata-sections
+    # -fno-split-wide-types
+    # -fno-tree-scev-cprop
+    --param=min-pagesize=0
 )
 file(GLOB SRC_FILES "src/*.c") # Load all files in src folder
 
