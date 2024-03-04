@@ -66,7 +66,7 @@ add_compile_options(
     # -fno-tree-scev-cprop
     --param=min-pagesize=0
 )
-file(GLOB SRC_FILES "src/*.c") # Load all files in src folder
+file(GLOB SRC_FILES CONFIGURE_DEPENDS "src/*.c") # Load all files in src folder
 
 # Create one target
 add_executable(${PRODUCT_NAME} ${SRC_FILES})
